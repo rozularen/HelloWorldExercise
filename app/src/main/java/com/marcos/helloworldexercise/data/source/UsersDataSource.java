@@ -12,11 +12,11 @@ public interface UsersDataSource {
 
     void getUsers(LoadUsersCallback callback);
 
-    void getUser(int userId, LoadUserCallback callback);
+    void getUser(Integer userId, LoadUserCallback callback);
 
-    void editUser(int userId);
+    void editUser(Integer userId);
 
-    void removeUser(int userId);
+    void removeUser(Integer userId);
 
     interface LoadUsersCallback {
         void onUsersLoaded(List<User> users);

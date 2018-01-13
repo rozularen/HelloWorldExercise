@@ -1,5 +1,9 @@
 package com.marcos.helloworldexercise.data.source;
 
+import com.marcos.helloworldexercise.data.User;
+
+import java.util.List;
+
 /**
  * Created by markc on 13/01/2018.
  */
@@ -33,21 +37,39 @@ public class UsersRepository implements UsersDataSource {
 
     @Override
     public void getUsers(LoadUsersCallback callback) {
+        if (callback != null) {
+            getUsersFromRemoteDataSource(callback);
+        }
+    }
+
+    private void getUsersFromRemoteDataSource(final LoadUsersCallback callback) {
+        remoteDataSource.getUsers(new LoadUsersCallback() {
+            @Override
+            public void onUsersLoaded(List<User> users) {
+                callback.onUsersLoaded(users);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
+    }
+
+    @Override
+    public void getUser(Integer userId, LoadUserCallback callback) {
+        if(userId != null){
+
+        }
+    }
+
+    @Override
+    public void editUser(Integer userId) {
 
     }
 
     @Override
-    public void getUser(int userId, LoadUserCallback callback) {
-
-    }
-
-    @Override
-    public void editUser(int userId) {
-
-    }
-
-    @Override
-    public void removeUser(int userId) {
+    public void removeUser(Integer userId) {
 
     }
 

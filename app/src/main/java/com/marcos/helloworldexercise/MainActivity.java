@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         MainPresenter mainPresenter = new MainPresenter(usersRepository, mainFragment);
 
-
     }
 
 }
