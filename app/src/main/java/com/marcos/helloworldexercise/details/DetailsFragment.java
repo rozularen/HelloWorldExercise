@@ -1,4 +1,4 @@
-package com.marcos.helloworldexercise.main;
+package com.marcos.helloworldexercise.details;
 
 
 import android.os.Bundle;
@@ -9,35 +9,39 @@ import android.view.ViewGroup;
 
 import com.marcos.helloworldexercise.R;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment implements MainContract.View {
+public class DetailsFragment extends Fragment implements DetailsContract.View {
 
-    public static final String TAG = "MainFragment";
-    private MainContract.Presenter presenter;
+    DetailsContract.Presenter presenter;
 
-    public MainFragment() {
+    public DetailsFragment() {
         // Required empty public constructor
     }
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static DetailsFragment newInstance() {
+        return new DetailsFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_details, container, false);
 
 
         return view;
     }
 
     @Override
-    public void setPresenter(MainContract.Presenter presenter) {
+    public void onDestroy() {
+        presenter.stop();
+        super.onDestroy();
+    }
+
+    @Override
+    public void setPresenter(DetailsContract.Presenter presenter) {
         this.presenter = presenter;
     }
 }

@@ -10,4 +10,16 @@ public class User {
     private Integer id;
     private String name;
     private Date birthdate;
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Date getBirthdate() {
+        return birthdate;
+    }
 }
