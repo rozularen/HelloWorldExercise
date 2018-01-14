@@ -57,8 +57,21 @@ public class UsersRemoteDataSource implements UsersDataSource {
     }
 
     @Override
-    public void getUser(Integer userId, LoadUserCallback callback) {
+    public void getUser(Integer userId, final LoadUserCallback callback) {
+        Call<User> call = apiService.getUser(userId);
 
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                User user = response.body();
+                callback.onUserLoaded(user);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
     @Override

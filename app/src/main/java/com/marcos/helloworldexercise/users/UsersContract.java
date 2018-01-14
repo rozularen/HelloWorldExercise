@@ -14,6 +14,8 @@ public interface UsersContract {
     interface View extends BaseView<UsersContract.Presenter> {
 
         void showUsers(List<User> users);
+
+        void setLoadingIndicator(boolean isLoading);
     }
 
     interface Presenter extends BasePresenter {

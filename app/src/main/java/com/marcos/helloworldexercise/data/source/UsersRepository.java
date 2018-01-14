@@ -1,5 +1,7 @@
 package com.marcos.helloworldexercise.data.source;
 
+import android.util.Log;
+
 import com.marcos.helloworldexercise.data.User;
 
 import java.util.List;
@@ -10,10 +12,9 @@ import java.util.List;
 
 public class UsersRepository implements UsersDataSource {
 
+    private static final String TAG = "UsersRepository";
     private static UsersRepository INSTANCE = null;
-
     private UsersDataSource localDataSource;
-
     private UsersDataSource remoteDataSource;
 
     // Prevent direct instantiation.
@@ -57,9 +58,20 @@ public class UsersRepository implements UsersDataSource {
     }
 
     @Override
-    public void getUser(Integer userId, LoadUserCallback callback) {
-        if(userId != null){
+    public void getUser(Integer userId, final LoadUserCallback callback) {
+        if (userId != null) {
+            remoteDataSource.getUser(userId, new LoadUserCallback() {
+                @Override
+                public void onUserLoaded(User user) {
+                    Log.d(TAG, "onUserLoaded: ");
+                    callback.onUserLoaded(user);
+                }
 
+                @Override
+                public void onDataNotAvailable() {
+                    callback.onDataNotAvailable();
+                }
+            });
         }
     }
 

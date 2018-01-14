@@ -36,9 +36,15 @@ public class UsersPresenter implements UsersContract.Presenter {
     @Override
     public void start() {
         //load whatever
+        loadUsers();
+    }
+
+    private void loadUsers() {
+        view.setLoadingIndicator(true);
         usersRepository.getUsers(new UsersDataSource.LoadUsersCallback() {
             @Override
             public void onUsersLoaded(List<User> users) {
+                view.setLoadingIndicator(false);
                 view.showUsers(users);
             }
 

@@ -33,12 +33,26 @@ public class MainActivity extends AppCompatActivity {
         UsersRepository usersRepository = UsersRepository.getInstance(usersRemoteDataSource);
 
         UsersPresenter usersPresenter = new UsersPresenter(usersRepository, usersFragment);
-
     }
 
-    public void navigateToDetails(){
-        DetailsFragment detailsFragment = DetailsFragment.newInstance();
-        DetailsPresenter detailsPresenter = new DetailsPresenter(detailsFragment);
+    public void navigateToDetails(int id) {
+        DetailsFragment detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentByTag(DetailsFragment.TAG);
+
+        if (detailsFragment == null) {
+            detailsFragment = DetailsFragment.newInstance(id);
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, detailsFragment)
+                    .addToBackStack(DetailsFragment.TAG)
+                    .commit();
+        }
+
+        UsersRemoteDataSource usersRemoteDataSource = UsersRemoteDataSource.getInstance();
+
+        UsersRepository usersRepository = UsersRepository.getInstance(usersRemoteDataSource);
+
+        DetailsPresenter detailsPresenter = new DetailsPresenter(id, usersRepository, detailsFragment);
     }
 
 }

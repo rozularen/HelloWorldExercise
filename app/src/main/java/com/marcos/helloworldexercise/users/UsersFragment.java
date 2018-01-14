@@ -7,10 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import com.marcos.helloworldexercise.MainActivity;
 import com.marcos.helloworldexercise.R;
 import com.marcos.helloworldexercise.data.User;
 
@@ -30,8 +33,13 @@ public class UsersFragment extends Fragment implements UsersContract.View {
     private UsersAdapter usersAdapter;
     private UsersContract.Presenter presenter;
 
+    private MainActivity mainActivity;
+
     @BindView(R.id.rv_users)
     RecyclerView rvUsers;
+
+    @BindView(R.id.pb_loading_indicator)
+    ProgressBar pbLoadingIndicator;
 
     public UsersFragment() {
         // Required empty public constructor
@@ -51,7 +59,7 @@ public class UsersFragment extends Fragment implements UsersContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        usersAdapter = new UsersAdapter(new ArrayList<User>(0), itemListener);
+        usersAdapter = new UsersAdapter(new ArrayList<User>(0), itemClickListener);
     }
 
     @Override
@@ -59,6 +67,8 @@ public class UsersFragment extends Fragment implements UsersContract.View {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_users, container, false);
+
+        mainActivity = (MainActivity) getActivity();
 
         ButterKnife.bind(this, view);
 
@@ -89,10 +99,20 @@ public class UsersFragment extends Fragment implements UsersContract.View {
         usersAdapter.notifyDataSetChanged();
     }
 
-    UserItemListener itemListener = new UserItemListener() {
+    @Override
+    public void setLoadingIndicator(boolean isLoading) {
+        if(isLoading) {
+            pbLoadingIndicator.setVisibility(View.VISIBLE);
+        } else {
+            pbLoadingIndicator.setVisibility(View.GONE);
+        }
+    }
+
+    UsersAdapter.ItemClickListener itemClickListener = new UsersAdapter.ItemClickListener() {
+
         @Override
-        public void onUserClick(User clickedUser) {
-            presenter.openUserDetails(clickedUser);
+        public void onClick(View view, int itemId) {
+            mainActivity.navigateToDetails(itemId);
         }
     };
 

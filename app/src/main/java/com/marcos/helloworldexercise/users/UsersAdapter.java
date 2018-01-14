@@ -22,16 +22,18 @@ import butterknife.ButterKnife;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
+    private final ItemClickListener itemClickListener;
     private List<User> users = new ArrayList<>();
 
-    public UsersAdapter(List<User> users) {
+    public UsersAdapter(List<User> users, ItemClickListener itemClickListener) {
         this.users = users;
+        this.itemClickListener = itemClickListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_layout, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view, itemClickListener);
         return viewHolder;
     }
 
@@ -39,6 +41,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         User user = users.get(position);
 
+        holder.user = user;
         holder.tvName.setText(user.getName());
         holder.tvBirthdate.setText(user.getBirthdate().toString());
 
@@ -55,11 +58,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     }
 
     public interface ItemClickListener {
-        void onClick(View view, int position);
+        void onClick(View view, int itemId);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private ItemClickListener itemClickListener;
+        private User user;
 
         @BindView(R.id.iv_profile_image)
         ImageView ivProfileImage;
@@ -70,17 +75,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         @BindView(R.id.tv_birthdate)
         TextView tvBirthdate;
 
-
-        ViewHolder(View itemView) {
+        ViewHolder(View itemView, ItemClickListener itemClickListener) {
             super(itemView);
+
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+
+            this.itemClickListener = itemClickListener;
         }
 
         @Override
         public void onClick(View view) {
-
+            itemClickListener.onClick(view, user.getId());
         }
     }
-
 }
