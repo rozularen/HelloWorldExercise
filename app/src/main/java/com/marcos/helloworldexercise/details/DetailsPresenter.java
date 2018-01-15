@@ -7,6 +7,10 @@ import com.marcos.helloworldexercise.data.User;
 import com.marcos.helloworldexercise.data.source.UsersDataSource;
 import com.marcos.helloworldexercise.data.source.UsersRepository;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by markc on 14/01/2018.
  */
@@ -24,7 +28,7 @@ public class DetailsPresenter implements DetailsContract.Presenter {
                             DetailsContract.View view) {
         this.userId = userId;
 
-        if(usersRepository != null){
+        if (usersRepository != null) {
             this.usersRepository = usersRepository;
             if (view != null) {
                 this.view = view;
@@ -44,17 +48,16 @@ public class DetailsPresenter implements DetailsContract.Presenter {
     }
 
     private void openUser() {
-        if(userId == null) {
-            //TODO: show null Id error
+        if (userId == null) {
+            view.showNullIdError();
             return;
         }
         view.setLoadingIndicator(true);
         usersRepository.getUser(userId, new UsersDataSource.LoadUserCallback() {
             @Override
             public void onUserLoaded(User user) {
-                //TODO: loading indicator maybe?
                 view.setLoadingIndicator(false);
-                if(user == null) {
+                if (user == null) {
                     view.showMissingUser();
                 } else {
                     showUser(user);
@@ -70,17 +73,19 @@ public class DetailsPresenter implements DetailsContract.Presenter {
     }
 
     private void showUser(User user) {
-
         String name = user.getName();
-        String birthdate = user.getBirthdate().toString();
 
-        if(Strings.isNullOrEmpty(name)){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String birthdate = formatter.format(user.getBirthdate());
+        Log.d(TAG, "showUser: " + birthdate);
+
+        if (Strings.isNullOrEmpty(name)) {
             view.showMissingName();
         } else {
             view.showName(name);
         }
 
-        if(Strings.isNullOrEmpty(birthdate)) {
+        if (Strings.isNullOrEmpty(birthdate)) {
             view.showMissingBirthdate();
         } else {
             view.showBirthdate(birthdate);
@@ -91,5 +96,15 @@ public class DetailsPresenter implements DetailsContract.Presenter {
     @Override
     public void stop() {
         view = null;
+    }
+
+    @Override
+    public void onRemoveItemClicked() {
+        usersRepository.removeUser(userId);
+    }
+
+    @Override
+    public void onEditItemClicked() {
+        view.showEditView(userId);
     }
 }

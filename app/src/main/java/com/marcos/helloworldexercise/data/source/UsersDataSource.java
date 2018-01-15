@@ -10,11 +10,13 @@ import java.util.List;
 
 public interface UsersDataSource {
 
+    void createUser(User user);
+
     void getUsers(LoadUsersCallback callback);
 
     void getUser(Integer userId, LoadUserCallback callback);
 
-    void editUser(Integer userId);
+    void updateUser(User user);
 
     void removeUser(Integer userId);
 

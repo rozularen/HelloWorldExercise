@@ -21,9 +21,16 @@ public interface DetailsContract {
         void showBirthdate(String birthdate);
 
         void setLoadingIndicator(boolean isLoading);
+
+        void showNullIdError();
+
+        void showEditView(Integer userId);
     }
 
     interface Presenter extends BasePresenter {
 
+        void onRemoveItemClicked();
+
+        void onEditItemClicked();
     }
 }

@@ -39,6 +39,29 @@ public class UsersRemoteDataSource implements UsersDataSource {
     }
 
     @Override
+    public void createUser(User user) {
+        String name = user.getName();
+        String birthdate = user.getBirthdate().toString();
+
+        Call<User> call = apiService.createUser(name, birthdate);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                //TODO: update UI
+                Log.d(TAG, "onResponse: STATUS CODE: " + response.code());
+                Log.d(TAG, "onResponse: User created succesfully." + response.body());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                //TODO: show error
+                Log.d(TAG, "onFailure: Couldn't create new user.");
+            }
+        });
+    }
+
+    @Override
     public void getUsers(final LoadUsersCallback callback) {
         Call<List<User>> call = apiService.getUsers();
 
@@ -75,13 +98,42 @@ public class UsersRemoteDataSource implements UsersDataSource {
     }
 
     @Override
-    public void editUser(Integer userId) {
+    public void updateUser(User user) {
+        Integer userId = user.getId();
+        String name = user.getName();
+        String birthdate = user.getBirthdate().toString();
 
+        Call<User> call = apiService.updateUser(userId, name, birthdate);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                //TODO: Update UI
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                //TODO: Show error while updating user
+            }
+        });
     }
 
     @Override
     public void removeUser(Integer userId) {
-
+        //TODO: Try to remove later
+//        Call<Void> call = apiService.removeUser(userId);
+//
+//        call.enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                //TODO: Update UI
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                //TODO: Show remove user error
+//            }
+//        });
     }
 
 }

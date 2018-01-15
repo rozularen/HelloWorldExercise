@@ -16,10 +16,11 @@ public interface UsersContract {
         void showUsers(List<User> users);
 
         void setLoadingIndicator(boolean isLoading);
+
+        void showUserLoadingError();
     }
 
     interface Presenter extends BasePresenter {
 
-        void openUserDetails(User clickedUser);
     }
 }

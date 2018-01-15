@@ -35,7 +35,6 @@ public class UsersPresenter implements UsersContract.Presenter {
 
     @Override
     public void start() {
-        //load whatever
         loadUsers();
     }
 
@@ -50,7 +49,7 @@ public class UsersPresenter implements UsersContract.Presenter {
 
             @Override
             public void onDataNotAvailable() {
-                //showerror
+                view.showUserLoadingError();
             }
         });
     }
@@ -60,9 +59,4 @@ public class UsersPresenter implements UsersContract.Presenter {
         view = null;
     }
 
-
-    @Override
-    public void openUserDetails(User clickedUser) {
-
-    }
 }

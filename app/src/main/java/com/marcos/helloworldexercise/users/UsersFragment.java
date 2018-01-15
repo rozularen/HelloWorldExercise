@@ -3,15 +3,17 @@ package com.marcos.helloworldexercise.users;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.marcos.helloworldexercise.MainActivity;
 import com.marcos.helloworldexercise.R;
@@ -30,10 +32,18 @@ import butterknife.ButterKnife;
 public class UsersFragment extends Fragment implements UsersContract.View {
 
     public static final String TAG = "UsersFragment";
+
     private UsersAdapter usersAdapter;
     private UsersContract.Presenter presenter;
-
     private MainActivity mainActivity;
+
+    UsersAdapter.ItemClickListener itemClickListener = new UsersAdapter.ItemClickListener() {
+
+        @Override
+        public void onClick(View view, int itemId) {
+            mainActivity.navigateToDetails(itemId);
+        }
+    };
 
     @BindView(R.id.rv_users)
     RecyclerView rvUsers;
@@ -41,10 +51,12 @@ public class UsersFragment extends Fragment implements UsersContract.View {
     @BindView(R.id.pb_loading_indicator)
     ProgressBar pbLoadingIndicator;
 
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
     public UsersFragment() {
         // Required empty public constructor
     }
-
 
     public static UsersFragment newInstance() {
         return new UsersFragment();
@@ -67,10 +79,20 @@ public class UsersFragment extends Fragment implements UsersContract.View {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_users, container, false);
-
+        ButterKnife.bind(this, view);
         mainActivity = (MainActivity) getActivity();
 
-        ButterKnife.bind(this, view);
+        ActionBar supportActionBar = mainActivity.getSupportActionBar();
+        supportActionBar.setDisplayHomeAsUpEnabled(false);
+        supportActionBar.setDisplayShowHomeEnabled(false);
+
+        //set up FloatingActionButton
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.navigateToCreate();
+            }
+        });
 
         //set up recycler view
         rvUsers.setAdapter(usersAdapter);
@@ -101,20 +123,17 @@ public class UsersFragment extends Fragment implements UsersContract.View {
 
     @Override
     public void setLoadingIndicator(boolean isLoading) {
-        if(isLoading) {
+        if (isLoading) {
             pbLoadingIndicator.setVisibility(View.VISIBLE);
         } else {
             pbLoadingIndicator.setVisibility(View.GONE);
         }
     }
 
-    UsersAdapter.ItemClickListener itemClickListener = new UsersAdapter.ItemClickListener() {
-
-        @Override
-        public void onClick(View view, int itemId) {
-            mainActivity.navigateToDetails(itemId);
-        }
-    };
+    @Override
+    public void showUserLoadingError() {
+        Toast.makeText(mainActivity, "Couldn't retrieve Users", Toast.LENGTH_SHORT).show();
+    }
 
     public interface UserItemListener {
         void onUserClick(User clickedUser);

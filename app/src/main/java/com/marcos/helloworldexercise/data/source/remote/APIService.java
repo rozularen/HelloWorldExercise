@@ -25,7 +25,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("create")
-    Call<User> createUser();
+    Call<User> createUser(@Field("name") String name, @Field("birthdate") String birthdate);
 
     @FormUrlEncoded
     @POST("update")

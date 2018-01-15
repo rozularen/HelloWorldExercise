@@ -1,14 +1,21 @@
 package com.marcos.helloworldexercise.details;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.marcos.helloworldexercise.MainActivity;
 import com.marcos.helloworldexercise.R;
 
 import butterknife.BindView;
@@ -22,6 +29,8 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
     public static final String TAG = "DetailsFragment";
 
     DetailsContract.Presenter presenter;
+
+    private MainActivity mainActivity;
 
     @BindView(R.id.pb_loading_indicator)
     ProgressBar pbLoadingIndicator;
@@ -56,8 +65,14 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_details, container, false);
-
         ButterKnife.bind(this, view);
+        mainActivity = (MainActivity) getActivity();
+
+        ActionBar supportActionBar = mainActivity.getSupportActionBar();
+        supportActionBar.setDisplayShowHomeEnabled(true);
+        supportActionBar.setDisplayHomeAsUpEnabled(true);
+
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -107,6 +122,41 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
             pbLoadingIndicator.setVisibility(View.VISIBLE);
         } else {
             pbLoadingIndicator.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showNullIdError() {
+        Toast.makeText(mainActivity, "User ID is null.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showEditView(Integer userId) {
+        mainActivity.navigateToEdit(userId);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.details_menu, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                mainActivity.navigateToUsers();
+                return true;
+            case R.id.item_edit:
+                presenter.onEditItemClicked();
+                return true;
+            case R.id.item_remove:
+                presenter.onRemoveItemClicked();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

@@ -14,7 +14,6 @@ public class UsersRepository implements UsersDataSource {
 
     private static final String TAG = "UsersRepository";
     private static UsersRepository INSTANCE = null;
-    private UsersDataSource localDataSource;
     private UsersDataSource remoteDataSource;
 
     // Prevent direct instantiation.
@@ -34,6 +33,13 @@ public class UsersRepository implements UsersDataSource {
 
     public static void destroyInstance() {
         INSTANCE = null;
+    }
+
+    @Override
+    public void createUser(User user) {
+        if(user != null) {
+            remoteDataSource.createUser(user);
+        }
     }
 
     @Override
@@ -76,13 +82,21 @@ public class UsersRepository implements UsersDataSource {
     }
 
     @Override
-    public void editUser(Integer userId) {
-
+    public void updateUser(User user) {
+        if(user != null){
+            remoteDataSource.updateUser(user);
+        } else {
+            Log.e(TAG, "updateUser: User can't be null.");
+        }
     }
 
     @Override
     public void removeUser(Integer userId) {
-
+        if(userId != null) {
+            remoteDataSource.removeUser(userId);
+        } else {
+            Log.e(TAG, "removeUser: User ID can't be null.");
+        }
     }
 
 }
