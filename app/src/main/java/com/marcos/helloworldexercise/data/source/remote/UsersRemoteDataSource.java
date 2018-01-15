@@ -1,7 +1,6 @@
 package com.marcos.helloworldexercise.data.source.remote;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.marcos.helloworldexercise.data.User;
 import com.marcos.helloworldexercise.data.source.UsersDataSource;
@@ -46,11 +45,14 @@ public class UsersRemoteDataSource implements UsersDataSource {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                User user = response.body();
-                callback.onUserCreated(user);
+                if (response.code() == 200 && response.isSuccessful()) {
+                    User user = response.body();
+                    callback.onUserCreated(user);
 
+                } else {
+                    callback.onDataNotAvailable();
+                }
                 Log.d(TAG, "onResponse: STATUS CODE: " + response.code());
-                Log.d(TAG, "onResponse: User created succesfully." + response.body());
             }
 
             @Override
@@ -68,8 +70,12 @@ public class UsersRemoteDataSource implements UsersDataSource {
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                List<User> users = response.body();
-                callback.onUsersLoaded(users);
+                if (response.code() == 200 && response.isSuccessful()) {
+                    List<User> users = response.body();
+                    callback.onUsersLoaded(users);
+                } else {
+                    callback.onDataNotAvailable();
+                }
             }
 
             @Override
@@ -86,8 +92,12 @@ public class UsersRemoteDataSource implements UsersDataSource {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                User user = response.body();
-                callback.onUserLoaded(user);
+                if (response.code() == 200 && response.isSuccessful()) {
+                    User user = response.body();
+                    callback.onUserLoaded(user);
+                } else {
+                    callback.onDataNotAvailable();
+                }
             }
 
             @Override
@@ -105,11 +115,13 @@ public class UsersRemoteDataSource implements UsersDataSource {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                User user = response.body();
-                callback.onUserUpdated(user);
-
+                if (response.code() == 200 && response.isSuccessful()) {
+                    User user = response.body();
+                    callback.onUserUpdated(user);
+                } else {
+                    callback.onDataNotAvailable();
+                }
                 Log.d(TAG, "onResponse: STATUS CODE: " + response.code());
-                Log.d(TAG, "onResponse: User updated succesfully" + response.body());
             }
 
             @Override
@@ -121,21 +133,25 @@ public class UsersRemoteDataSource implements UsersDataSource {
     }
 
     @Override
-    public void removeUser(Integer userId, RemoveUserCallback callback) {
+    public void removeUser(Integer userId, final RemoveUserCallback callback) {
         //TODO: Try to remove later
-//        Call<Void> call = apiService.removeUser(userId);
-//
-//        call.enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                callback.onUserRemoved();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                callback.onDataNotAvailable();
-//            }
-//        });
+        Call<Void> call = apiService.removeUser(userId);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 200 && response.isSuccessful()) {
+                    callback.onUserRemoved();
+                } else {
+                    callback.onDataNotAvailable();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
 }

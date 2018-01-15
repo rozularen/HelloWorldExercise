@@ -29,6 +29,8 @@ public interface DetailsContract {
         void showUserRemoved();
 
         void showRemoveUserError();
+
+        void showRemoveConfirmDialog();
     }
 
     interface Presenter extends BasePresenter {
@@ -36,5 +38,8 @@ public interface DetailsContract {
         void onRemoveItemClicked();
 
         void onEditItemClicked();
+
+        void onConfirmRemoveUserClicked();
+
     }
 }

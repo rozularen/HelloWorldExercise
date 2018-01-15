@@ -27,7 +27,7 @@ import butterknife.OnClick;
 public class CreateEditFragment extends Fragment implements CreateEditContract.View {
 
     public static final String TAG = "CreateEditFragment";
-    private static boolean isEditing = false;
+    private static boolean isUpdatingUser = false;
     @BindView(R.id.et_name)
     TextInputEditText etName;
     @BindView(R.id.et_birthdate)
@@ -46,7 +46,7 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
     }
 
     public static CreateEditFragment newEditInstance(Integer userId) {
-        isEditing = true;
+        isUpdatingUser = true;
         Bundle args = new Bundle();
         args.putInt("id", userId);
         CreateEditFragment createEditFragment = new CreateEditFragment();
@@ -68,20 +68,21 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
         ButterKnife.bind(this, view);
         mainActivity = (MainActivity) getActivity();
 
-        ActionBar supportActionBar = mainActivity.getSupportActionBar();
-
-        supportActionBar.setDisplayHomeAsUpEnabled(true);
-        supportActionBar.setDisplayShowHomeEnabled(true);
-
         setHasOptionsMenu(true);
 
-        //TODO: Should move away
-        if (isEditing) {
-            supportActionBar.setTitle("Update User");
-            tvSave.setText("UPDATE");
-        } else {
-            supportActionBar.setTitle("Create New User");
-            tvSave.setText("SAVE");
+        ActionBar supportActionBar = mainActivity.getSupportActionBar();
+
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+
+            if (isUpdatingUser) {
+                supportActionBar.setTitle("Update User");
+                tvSave.setText(R.string.update);
+            } else {
+                supportActionBar.setTitle("Create New User");
+                tvSave.setText(R.string.create);
+            }
         }
 
         return view;
@@ -90,7 +91,7 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
     @Override
     public void onDestroy() {
         presenter.stop();
-        isEditing = false;
+        isUpdatingUser = false;
         super.onDestroy();
     }
 
@@ -108,10 +109,10 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
     void onSaveClick(View view) {
         String name = etName.getText().toString();
         String birthdate = etBirthdate.getText().toString();
-        if (isEditing) {
-            presenter.onSaveClicked(name, birthdate);
-        } else {
+        if (isUpdatingUser) {
             presenter.onUpdateClicked(name, birthdate);
+        } else {
+            presenter.onSaveClicked(name, birthdate);
         }
     }
 
@@ -139,7 +140,6 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
 
     @Override
     public void showMissingUser() {
-        //TODO: show missing user erro
         Toast.makeText(mainActivity, "User is missing", Toast.LENGTH_SHORT).show();
     }
 
@@ -165,22 +165,24 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
 
     @Override
     public void showCreateUserError() {
-
+        Toast.makeText(mainActivity, "Could not create the new user", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showUserCreated() {
-
+        Toast.makeText(mainActivity, "User created succesfully", Toast.LENGTH_SHORT).show();
+        mainActivity.navigateToUsers();
     }
 
     @Override
-    public void showUserUpdated() {
-
+    public void showUserUpdated(Integer userId) {
+        Toast.makeText(mainActivity, "User updated succesfully", Toast.LENGTH_SHORT).show();
+        mainActivity.navigateToDetails(userId);
     }
 
     @Override
     public void showUpdateUserError() {
-
+        Toast.makeText(mainActivity, "Could not update the user", Toast.LENGTH_SHORT).show();
     }
 
     private String twoDigits(int n) {
@@ -191,7 +193,7 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (!isEditing) {
+                if (!isUpdatingUser) {
                     mainActivity.navigateToUsers();
                 } else {
                     mainActivity.onBackPressed();
@@ -201,6 +203,4 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 }

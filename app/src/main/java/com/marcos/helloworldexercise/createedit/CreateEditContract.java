@@ -28,7 +28,7 @@ public interface CreateEditContract {
 
         void showUserCreated();
 
-        void showUserUpdated();
+        void showUserUpdated(Integer userId);
 
         void showUpdateUserError();
     }

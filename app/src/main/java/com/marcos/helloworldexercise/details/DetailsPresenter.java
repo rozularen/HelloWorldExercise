@@ -100,6 +100,17 @@ public class DetailsPresenter implements DetailsContract.Presenter {
 
     @Override
     public void onRemoveItemClicked() {
+        view.showRemoveConfirmDialog();
+
+    }
+
+    @Override
+    public void onEditItemClicked() {
+        view.showEditView(userId);
+    }
+
+    @Override
+    public void onConfirmRemoveUserClicked() {
         usersRepository.removeUser(userId, new UsersDataSource.RemoveUserCallback() {
             @Override
             public void onUserRemoved() {
@@ -111,10 +122,5 @@ public class DetailsPresenter implements DetailsContract.Presenter {
                 view.showRemoveUserError();
             }
         });
-    }
-
-    @Override
-    public void onEditItemClicked() {
-        view.showEditView(userId);
     }
 }

@@ -1,10 +1,11 @@
 package com.marcos.helloworldexercise.details;
 
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,21 +35,15 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
     public static final String TAG = "DetailsFragment";
 
     DetailsContract.Presenter presenter;
-
-    private MainActivity mainActivity;
-
     @BindView(R.id.pb_loading_indicator)
     ProgressBar pbLoadingIndicator;
-
     @BindView(R.id.iv_profile_image)
     ImageView ivProfileImage;
-
     @BindView(R.id.tv_name)
     TextView tvName;
-
     @BindView(R.id.tv_birthdate)
     TextView tvBirthdate;
-
+    private MainActivity mainActivity;
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -87,7 +82,7 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
         Random random = new Random();
 
         // create a big random number - maximum is ffffff (hex) = 16777215 (dez)
-        int nextInt = random.nextInt(256*256*256);
+        int nextInt = random.nextInt(256 * 256 * 256);
 
         String path = "http://via.placeholder.com/200x200/" + nextInt;
 
@@ -95,7 +90,6 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
                 .load(path)
                 .transform(new CircleTransform())
                 .into(ivProfileImage);
-
 
         return view;
     }
@@ -160,25 +154,44 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
 
     @Override
     public void showUserRemoved() {
-
+        mainActivity.navigateToUsers();
     }
 
     @Override
     public void showRemoveUserError() {
-
+        Toast.makeText(mainActivity, "Could not remove the user.", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showRemoveConfirmDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder
+                .setTitle("Remove User")
+                .setMessage("Are you sure you want to remove this user?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        presenter.onConfirmRemoveUserClicked();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .create()
+                .show();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.details_menu, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 mainActivity.navigateToUsers();
                 return true;

@@ -140,7 +140,7 @@ public class CreateEditPresenter implements CreateEditContract.Presenter {
             usersRepository.updateUser(newUser, new UsersDataSource.UpdateUserCallback() {
                 @Override
                 public void onUserUpdated(User user) {
-                    view.showUserUpdated();
+                    view.showUserUpdated(user.getId());
                 }
 
                 @Override
