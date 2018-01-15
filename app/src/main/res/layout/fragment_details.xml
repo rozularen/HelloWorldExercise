@@ -45,14 +45,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Marcos Stival"
         android:textColor="#ffffff"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_profile_image"
-        app:layout_constraintVertical_bias="0.034" />
+        app:layout_constraintVertical_bias="0.034"
+        tools:text="Marcos Stival" />
 
 
     <TextView
@@ -62,14 +62,14 @@
         android:layout_marginTop="8dp"
         android:drawablePadding="8dp"
         android:drawableStart="@drawable/ic_cake_white_24dp"
-        android:text="11/10/1996"
+        android:gravity="bottom"
         android:textColor="#ffffff"
         android:textSize="16sp"
-        android:gravity="bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_name" />
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        tools:text="11/10/1996" />
 
 
 </android.support.constraint.ConstraintLayout>

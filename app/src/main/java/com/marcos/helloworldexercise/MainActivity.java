@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToDetails(int id) {
-        getSupportActionBar().setTitle("Details");
-
         DetailsFragment detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentByTag(DetailsFragment.TAG);
 
         if (detailsFragment == null) {
@@ -55,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToCreate() {
-        getSupportActionBar().setTitle("Create New User");
-
         CreateEditFragment createEditFragment = (CreateEditFragment) getSupportFragmentManager().findFragmentByTag(CreateEditFragment.TAG);
 
         if (createEditFragment == null) {
@@ -77,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToUsers() {
-        getSupportActionBar().setTitle("Hello World Exercise");
-
         UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag(UsersFragment.TAG);
 
         if (usersFragment == null) {

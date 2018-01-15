@@ -71,6 +71,7 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
         ActionBar supportActionBar = mainActivity.getSupportActionBar();
         supportActionBar.setDisplayShowHomeEnabled(true);
         supportActionBar.setDisplayHomeAsUpEnabled(true);
+        supportActionBar.setTitle("Details");
 
         setHasOptionsMenu(true);
 

@@ -27,7 +27,7 @@ import butterknife.OnClick;
 public class CreateEditFragment extends Fragment implements CreateEditContract.View {
 
     public static final String TAG = "CreateEditFragment";
-    private static boolean isEditing;
+    private static boolean isEditing = false;
     @BindView(R.id.et_name)
     TextInputEditText etName;
     @BindView(R.id.et_birthdate)
@@ -69,14 +69,18 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
         mainActivity = (MainActivity) getActivity();
 
         ActionBar supportActionBar = mainActivity.getSupportActionBar();
+
         supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setDisplayShowHomeEnabled(true);
 
         setHasOptionsMenu(true);
 
+        //TODO: Should move away
         if (isEditing) {
+            supportActionBar.setTitle("Update User");
             tvSave.setText("UPDATE");
         } else {
+            supportActionBar.setTitle("Create New User");
             tvSave.setText("SAVE");
         }
 
@@ -86,6 +90,7 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
     @Override
     public void onDestroy() {
         presenter.stop();
+        isEditing = false;
         super.onDestroy();
     }
 

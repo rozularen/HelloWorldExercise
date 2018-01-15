@@ -85,6 +85,8 @@ public class UsersFragment extends Fragment implements UsersContract.View {
         ActionBar supportActionBar = mainActivity.getSupportActionBar();
         supportActionBar.setDisplayHomeAsUpEnabled(false);
         supportActionBar.setDisplayShowHomeEnabled(false);
+        supportActionBar.setTitle("Hello World Exercise");
+
 
         //set up FloatingActionButton
         fab.setOnClickListener(new View.OnClickListener() {
