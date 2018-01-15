@@ -105,7 +105,17 @@ public class CreateEditPresenter implements CreateEditContract.Presenter {
             }
 
             User newUser = new User(name, outputDate);
-            usersRepository.createUser(newUser);
+            usersRepository.createUser(newUser, new UsersDataSource.CreateUserCallback() {
+                @Override
+                public void onUserCreated(User user) {
+                    view.showUserCreated();
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    view.showCreateUserError();
+                }
+            });
         }
     }
 
@@ -127,7 +137,17 @@ public class CreateEditPresenter implements CreateEditContract.Presenter {
             }
 
             User newUser = new User(userId, name, outputDate);
-            usersRepository.updateUser(newUser);
+            usersRepository.updateUser(newUser, new UsersDataSource.UpdateUserCallback() {
+                @Override
+                public void onUserUpdated(User user) {
+                    view.showUserUpdated();
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    view.showUpdateUserError();
+                }
+            });
         }
     }
 }

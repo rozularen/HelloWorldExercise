@@ -136,6 +136,16 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
         mainActivity.navigateToEdit(userId);
     }
 
+    @Override
+    public void showUserRemoved() {
+
+    }
+
+    @Override
+    public void showRemoveUserError() {
+
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

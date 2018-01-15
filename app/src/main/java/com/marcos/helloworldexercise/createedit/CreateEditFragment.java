@@ -163,6 +163,26 @@ public class CreateEditFragment extends Fragment implements CreateEditContract.V
         etBirthdate.setText(birthdate);
     }
 
+    @Override
+    public void showCreateUserError() {
+
+    }
+
+    @Override
+    public void showUserCreated() {
+
+    }
+
+    @Override
+    public void showUserUpdated() {
+
+    }
+
+    @Override
+    public void showUpdateUserError() {
+
+    }
+
     private String twoDigits(int n) {
         return (n <= 9) ? ("0" + n) : String.valueOf(n);
     }

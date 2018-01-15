@@ -25,6 +25,10 @@ public interface DetailsContract {
         void showNullIdError();
 
         void showEditView(Integer userId);
+
+        void showUserRemoved();
+
+        void showRemoveUserError();
     }
 
     interface Presenter extends BasePresenter {

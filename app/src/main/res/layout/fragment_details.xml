@@ -20,7 +20,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:contentDescription="@string/user_profile_image"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/ic_default_user_image"
         app:layout_constraintBottom_toBottomOf="@id/fl_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -23,6 +23,14 @@ public interface CreateEditContract {
         void showMissingBirthdate();
 
         void showBirthdate(String birthdate);
+
+        void showCreateUserError();
+
+        void showUserCreated();
+
+        void showUserUpdated();
+
+        void showUpdateUserError();
     }
 
     interface Presenter extends BasePresenter {

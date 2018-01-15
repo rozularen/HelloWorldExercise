@@ -100,7 +100,17 @@ public class DetailsPresenter implements DetailsContract.Presenter {
 
     @Override
     public void onRemoveItemClicked() {
-        usersRepository.removeUser(userId);
+        usersRepository.removeUser(userId, new UsersDataSource.RemoveUserCallback() {
+            @Override
+            public void onUserRemoved() {
+                view.showUserRemoved();
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                view.showRemoveUserError();
+            }
+        });
     }
 
     @Override

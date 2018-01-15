@@ -36,9 +36,19 @@ public class UsersRepository implements UsersDataSource {
     }
 
     @Override
-    public void createUser(User user) {
+    public void createUser(User user, final CreateUserCallback callback) {
         if(user != null) {
-            remoteDataSource.createUser(user);
+            remoteDataSource.createUser(user, new CreateUserCallback() {
+                @Override
+                public void onUserCreated(User user) {
+                    callback.onUserCreated(user);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    callback.onDataNotAvailable();
+                }
+            });
         }
     }
 
@@ -82,18 +92,38 @@ public class UsersRepository implements UsersDataSource {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user, final UpdateUserCallback callback) {
         if(user != null){
-            remoteDataSource.updateUser(user);
+            remoteDataSource.updateUser(user, new UpdateUserCallback() {
+                @Override
+                public void onUserUpdated(User user) {
+                    callback.onUserUpdated(user);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    callback.onDataNotAvailable();
+                }
+            });
         } else {
             Log.e(TAG, "updateUser: User can't be null.");
         }
     }
 
     @Override
-    public void removeUser(Integer userId) {
+    public void removeUser(Integer userId, final RemoveUserCallback callback) {
         if(userId != null) {
-            remoteDataSource.removeUser(userId);
+            remoteDataSource.removeUser(userId, new RemoveUserCallback() {
+                @Override
+                public void onUserRemoved() {
+                    callback.onUserRemoved();
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    callback.onDataNotAvailable();
+                }
+            });
         } else {
             Log.e(TAG, "removeUser: User ID can't be null.");
         }
