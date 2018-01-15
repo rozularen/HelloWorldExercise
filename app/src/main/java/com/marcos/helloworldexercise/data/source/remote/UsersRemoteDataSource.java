@@ -134,7 +134,6 @@ public class UsersRemoteDataSource implements UsersDataSource {
 
     @Override
     public void removeUser(Integer userId, final RemoveUserCallback callback) {
-        //TODO: Try to remove later
         Call<Void> call = apiService.removeUser(userId);
 
         call.enqueue(new Callback<Void>() {

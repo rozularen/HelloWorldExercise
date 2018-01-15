@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -15,11 +16,13 @@ class APIClient {
     private static Retrofit retrofit = null;
 
     static Retrofit getClient() {
-        String baseUrl = "http://hello-world.innocv.com/api/user/";
+        String baseUrl = "https://hello-world.innocv.com/api/user/";
 
         if (retrofit == null) {
 
-            OkHttpClient client = new OkHttpClient.Builder().build();
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                     .create();

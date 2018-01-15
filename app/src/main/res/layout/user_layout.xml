@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp">
 
     <ImageView
         android:id="@+id/iv_profile_image"
@@ -21,7 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre de usuario"
-            android:textSize="24sp" />
+            android:textColor="#424242"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_birthdate"
