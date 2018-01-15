@@ -38,14 +38,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.229" />
 
-    <!-- TODO: Extract colors to colors.xml -->
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textColor="#ffffff"
+        android:textColor="@color/color_white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
@@ -63,7 +62,7 @@
         android:drawablePadding="8dp"
         android:drawableStart="@drawable/ic_cake_white_24dp"
         android:gravity="bottom"
-        android:textColor="#ffffff"
+        android:textColor="@color/color_white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"

@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToEdit(Integer userId) {
-        //TODO: Navigate to edit view
         getSupportActionBar().setTitle("Update User");
 
         CreateEditFragment createEditFragment = (CreateEditFragment) getSupportFragmentManager().findFragmentByTag(CreateEditFragment.TAG);

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre de usuario"
-            android:textColor="#424242"
+            android:textColor="@color/color_gray"
             android:textSize="20sp" />
 
         <TextView

@@ -39,7 +39,6 @@ public class UsersRemoteDataSource implements UsersDataSource {
 
     @Override
     public void createUser(User user, final CreateUserCallback callback) {
-        //TODO: Validate User object before POST request
         Call<User> call = apiService.createUser(user);
 
         call.enqueue(new Callback<User>() {
@@ -109,7 +108,6 @@ public class UsersRemoteDataSource implements UsersDataSource {
 
     @Override
     public void updateUser(User user, final UpdateUserCallback callback) {
-        //TODO: Validate user object before POST request
         Call<User> call = apiService.updateUser(user);
 
         call.enqueue(new Callback<User>() {
