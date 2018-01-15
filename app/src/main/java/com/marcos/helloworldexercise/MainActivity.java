@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.marcos.helloworldexercise.create.CreateFragment;
-import com.marcos.helloworldexercise.create.CreatePresenter;
+import com.marcos.helloworldexercise.createedit.CreateEditFragment;
+import com.marcos.helloworldexercise.createedit.CreateEditPresenter;
 import com.marcos.helloworldexercise.data.source.UsersRepository;
 import com.marcos.helloworldexercise.data.source.remote.UsersRemoteDataSource;
 import com.marcos.helloworldexercise.details.DetailsFragment;
@@ -57,15 +57,15 @@ public class MainActivity extends AppCompatActivity {
     public void navigateToCreate() {
         getSupportActionBar().setTitle("Create New User");
 
-        CreateFragment createFragment = (CreateFragment) getSupportFragmentManager().findFragmentByTag(CreateFragment.TAG);
+        CreateEditFragment createEditFragment = (CreateEditFragment) getSupportFragmentManager().findFragmentByTag(CreateEditFragment.TAG);
 
-        if (createFragment == null) {
-            createFragment = CreateFragment.newInstance();
+        if (createEditFragment == null) {
+            createEditFragment = CreateEditFragment.newInstance();
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, createFragment)
-                    .addToBackStack(CreateFragment.TAG)
+                    .replace(R.id.container, createEditFragment)
+                    .addToBackStack(CreateEditFragment.TAG)
                     .commit();
         }
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         UsersRepository usersRepository = UsersRepository.getInstance(usersRemoteDataSource);
 
-        CreatePresenter createPresenter = new CreatePresenter(usersRepository, createFragment);
+        CreateEditPresenter createEditPresenter = new CreateEditPresenter(usersRepository, createEditFragment);
     }
 
     public void navigateToUsers() {
@@ -99,5 +99,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void navigateToEdit(Integer userId) {
         //TODO: Navigate to edit view
+        getSupportActionBar().setTitle("Update User");
+
+        CreateEditFragment createEditFragment = (CreateEditFragment) getSupportFragmentManager().findFragmentByTag(CreateEditFragment.TAG);
+
+        if (createEditFragment == null) {
+            createEditFragment = CreateEditFragment.newEditInstance(userId);
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, createEditFragment)
+                    .addToBackStack(CreateEditFragment.TAG)
+                    .commit();
+        }
+
+        UsersRemoteDataSource usersRemoteDataSource = UsersRemoteDataSource.getInstance();
+
+        UsersRepository usersRepository = UsersRepository.getInstance(usersRemoteDataSource);
+
+        CreateEditPresenter createEditPresenter = new CreateEditPresenter(userId, usersRepository, createEditFragment);
     }
 }

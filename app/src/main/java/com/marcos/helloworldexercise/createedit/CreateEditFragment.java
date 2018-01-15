@@ -1,4 +1,4 @@
-package com.marcos.helloworldexercise.create;
+package com.marcos.helloworldexercise.createedit;
 
 
 import android.app.DatePickerDialog;
@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.marcos.helloworldexercise.MainActivity;
 import com.marcos.helloworldexercise.R;
@@ -22,22 +24,40 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateFragment extends Fragment implements CreateContract.View {
+public class CreateEditFragment extends Fragment implements CreateEditContract.View {
 
-    public static final String TAG = "CreateFragment";
+    public static final String TAG = "CreateEditFragment";
+    private static boolean isEditing;
     @BindView(R.id.et_name)
     TextInputEditText etName;
     @BindView(R.id.et_birthdate)
     TextInputEditText etBirthdate;
-    private CreateContract.Presenter presenter;
+    @BindView(R.id.tv_save)
+    TextView tvSave;
+    private CreateEditContract.Presenter presenter;
     private MainActivity mainActivity;
 
-    public CreateFragment() {
+    public CreateEditFragment() {
         // Required empty public constructor
     }
 
-    public static CreateFragment newInstance() {
-        return new CreateFragment();
+    public static CreateEditFragment newInstance() {
+        return new CreateEditFragment();
+    }
+
+    public static CreateEditFragment newEditInstance(Integer userId) {
+        isEditing = true;
+        Bundle args = new Bundle();
+        args.putInt("id", userId);
+        CreateEditFragment createEditFragment = new CreateEditFragment();
+        createEditFragment.setArguments(args);
+        return createEditFragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.start();
     }
 
     @Override
@@ -54,11 +74,23 @@ public class CreateFragment extends Fragment implements CreateContract.View {
 
         setHasOptionsMenu(true);
 
+        if (isEditing) {
+            tvSave.setText("UPDATE");
+        } else {
+            tvSave.setText("SAVE");
+        }
+
         return view;
     }
 
     @Override
-    public void setPresenter(CreateContract.Presenter presenter) {
+    public void onDestroy() {
+        presenter.stop();
+        super.onDestroy();
+    }
+
+    @Override
+    public void setPresenter(CreateEditContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -71,14 +103,17 @@ public class CreateFragment extends Fragment implements CreateContract.View {
     void onSaveClick(View view) {
         String name = etName.getText().toString();
         String birthdate = etBirthdate.getText().toString();
-        presenter.onSaveClicked(name, birthdate);
+        if (isEditing) {
+            presenter.onSaveClicked(name, birthdate);
+        } else {
+            presenter.onUpdateClicked(name, birthdate);
+        }
     }
 
     private void showDatePickerDialog() {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                // +1 because january is zero
                 final String selectedDate = twoDigits(day) + "/" + twoDigits(month + 1) + "/" + year;
 
                 etBirthdate.setText(selectedDate);
@@ -97,6 +132,32 @@ public class CreateFragment extends Fragment implements CreateContract.View {
         etBirthdate.setError("Birthdate can't be empty");
     }
 
+    @Override
+    public void showMissingUser() {
+        //TODO: show missing user erro
+        Toast.makeText(mainActivity, "User is missing", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showMissingName() {
+        etName.setError("User Name is missing");
+    }
+
+    @Override
+    public void showName(String name) {
+        etName.setText(name);
+    }
+
+    @Override
+    public void showMissingBirthdate() {
+        etBirthdate.setError("User Birthday is missing");
+    }
+
+    @Override
+    public void showBirthdate(String birthdate) {
+        etBirthdate.setText(birthdate);
+    }
+
     private String twoDigits(int n) {
         return (n <= 9) ? ("0" + n) : String.valueOf(n);
     }
@@ -105,10 +166,16 @@ public class CreateFragment extends Fragment implements CreateContract.View {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                mainActivity.navigateToUsers();
+                if (!isEditing) {
+                    mainActivity.navigateToUsers();
+                } else {
+                    mainActivity.onBackPressed();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 }

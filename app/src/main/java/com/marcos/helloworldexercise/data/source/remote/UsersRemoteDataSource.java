@@ -109,11 +109,14 @@ public class UsersRemoteDataSource implements UsersDataSource {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 //TODO: Update UI
+                Log.d(TAG, "onResponse: STATUS CODE: " + response.code());
+                Log.d(TAG, "onResponse: User updated succesfully" + response.body());
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 //TODO: Show error while updating user
+                Log.e(TAG, "onFailure: Error while updating user.", t);
             }
         });
     }

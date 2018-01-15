@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.marcos.helloworldexercise.R;
 import com.marcos.helloworldexercise.data.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,7 +45,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         holder.user = user;
         holder.tvName.setText(user.getName());
-        holder.tvBirthdate.setText(user.getBirthdate().toString());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String birthdate = formatter.format(user.getBirthdate());
+
+        holder.tvBirthdate.setText(birthdate);
 
         //get random pic and link it to each user
     }
