@@ -39,23 +39,23 @@ public class UsersRemoteDataSource implements UsersDataSource {
     }
 
     @Override
-    public void createUser(User user) {
-        String name = user.getName();
-        String birthdate = user.getBirthdate().toString();
-
-        Call<User> call = apiService.createUser(name, birthdate);
+    public void createUser(User user, final CreateUserCallback callback) {
+        //TODO: Validate User object before POST request
+        Call<User> call = apiService.createUser(user);
 
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                //TODO: update UI
+                User user = response.body();
+                callback.onUserCreated(user);
+
                 Log.d(TAG, "onResponse: STATUS CODE: " + response.code());
                 Log.d(TAG, "onResponse: User created succesfully." + response.body());
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                //TODO: show error
+                callback.onDataNotAvailable();
                 Log.d(TAG, "onFailure: Couldn't create new user.");
             }
         });
@@ -98,43 +98,42 @@ public class UsersRemoteDataSource implements UsersDataSource {
     }
 
     @Override
-    public void updateUser(User user) {
-        Integer userId = user.getId();
-        String name = user.getName();
-        String birthdate = user.getBirthdate().toString();
-
-        Call<User> call = apiService.updateUser(userId, name, birthdate);
+    public void updateUser(User user, final UpdateUserCallback callback) {
+        //TODO: Validate user object before POST request
+        Call<User> call = apiService.updateUser(user);
 
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                //TODO: Update UI
+                User user = response.body();
+                callback.onUserUpdated(user);
+
                 Log.d(TAG, "onResponse: STATUS CODE: " + response.code());
                 Log.d(TAG, "onResponse: User updated succesfully" + response.body());
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                //TODO: Show error while updating user
+                callback.onDataNotAvailable();
                 Log.e(TAG, "onFailure: Error while updating user.", t);
             }
         });
     }
 
     @Override
-    public void removeUser(Integer userId) {
+    public void removeUser(Integer userId, RemoveUserCallback callback) {
         //TODO: Try to remove later
 //        Call<Void> call = apiService.removeUser(userId);
 //
 //        call.enqueue(new Callback<Void>() {
 //            @Override
 //            public void onResponse(Call<Void> call, Response<Void> response) {
-//                //TODO: Update UI
+//                callback.onUserRemoved();
 //            }
 //
 //            @Override
 //            public void onFailure(Call<Void> call, Throwable t) {
-//                //TODO: Show remove user error
+//                callback.onDataNotAvailable();
 //            }
 //        });
     }
