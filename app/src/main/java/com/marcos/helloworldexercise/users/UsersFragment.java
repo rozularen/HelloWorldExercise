@@ -32,11 +32,15 @@ import butterknife.ButterKnife;
 public class UsersFragment extends Fragment implements UsersContract.View {
 
     public static final String TAG = "UsersFragment";
-
+    @BindView(R.id.rv_users)
+    RecyclerView rvUsers;
+    @BindView(R.id.pb_loading_indicator)
+    ProgressBar pbLoadingIndicator;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     private UsersAdapter usersAdapter;
     private UsersContract.Presenter presenter;
     private MainActivity mainActivity;
-
     UsersAdapter.ItemClickListener itemClickListener = new UsersAdapter.ItemClickListener() {
 
         @Override
@@ -44,15 +48,6 @@ public class UsersFragment extends Fragment implements UsersContract.View {
             mainActivity.navigateToDetails(itemId);
         }
     };
-
-    @BindView(R.id.rv_users)
-    RecyclerView rvUsers;
-
-    @BindView(R.id.pb_loading_indicator)
-    ProgressBar pbLoadingIndicator;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
 
     public UsersFragment() {
         // Required empty public constructor
@@ -71,7 +66,7 @@ public class UsersFragment extends Fragment implements UsersContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        usersAdapter = new UsersAdapter(new ArrayList<User>(0), itemClickListener);
+        usersAdapter = new UsersAdapter(new ArrayList<User>(0), getContext(), itemClickListener);
     }
 
     @Override

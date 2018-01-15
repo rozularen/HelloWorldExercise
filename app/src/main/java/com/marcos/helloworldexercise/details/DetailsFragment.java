@@ -11,12 +11,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.marcos.helloworldexercise.MainActivity;
 import com.marcos.helloworldexercise.R;
+import com.marcos.helloworldexercise.util.CircleTransform;
+import com.squareup.picasso.Picasso;
+
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +39,9 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
 
     @BindView(R.id.pb_loading_indicator)
     ProgressBar pbLoadingIndicator;
+
+    @BindView(R.id.iv_profile_image)
+    ImageView ivProfileImage;
 
     @BindView(R.id.tv_name)
     TextView tvName;
@@ -74,6 +82,20 @@ public class DetailsFragment extends Fragment implements DetailsContract.View {
         supportActionBar.setTitle("Details");
 
         setHasOptionsMenu(true);
+
+        // create random object - reuse this as often as possible
+        Random random = new Random();
+
+        // create a big random number - maximum is ffffff (hex) = 16777215 (dez)
+        int nextInt = random.nextInt(256*256*256);
+
+        String path = "http://via.placeholder.com/200x200/" + nextInt;
+
+        Picasso.with(getContext())
+                .load(path)
+                .transform(new CircleTransform())
+                .into(ivProfileImage);
+
 
         return view;
     }
